@@ -25,6 +25,39 @@ public class Day2Solution {
         print(safeCount)
     }
     
+    func part2 () {
+        let fileURL = Bundle.main.url(forResource: "Day2Input", withExtension: "txt")
+        let content = try! String(contentsOf: fileURL!, encoding: .utf8)
+        let lines = content.components(separatedBy: .newlines)
+        var safeCount = 0
+        
+        for i in 0..<lines.count {
+            /// split each line by space
+            let line = lines[i].components(separatedBy: " ")
+            if (computeIsSafeWithDampener(line: line)) {
+                safeCount += 1
+            }
+        }
+        
+        print(safeCount)
+    }
+    
+    func computeIsSafeWithDampener (line: [String]) -> Bool {
+        if (computeIsSafe(line: line)) {
+            return true
+        }
+        
+        for j in 0..<line.count {
+            var modifiedLine = line
+            modifiedLine.remove(at: j)
+            if (computeIsSafe(line: modifiedLine)) {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
     func computeIsSafe (line: [String]) -> Bool {
         let isAscending = Int(line[1])! - Int(line[0])! > 0
         

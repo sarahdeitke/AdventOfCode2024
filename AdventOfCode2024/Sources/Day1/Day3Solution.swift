@@ -8,16 +8,9 @@ import Foundation
 
 public class Day3Solution {
     func part1 () {
-        /// read txt file
-        let fileURL = Bundle.main.url(forResource: "Day3Input", withExtension: "txt")
-        let content = try! String(contentsOf: fileURL!, encoding: .utf8)
-        let lines = content.components(separatedBy: .newlines)
+        let lines = readTextFile()
         
-        /// get corrupt input into string
-        var corruptInput = ""
-        for i in 0..<lines.count {
-            corruptInput += lines[i]
-        }
+        let corruptInput = buildCorruptInput(lines: lines)
         
         /// filter corrupt input
         let range = NSRange(location: 0, length: corruptInput.utf16.count)
@@ -41,5 +34,24 @@ public class Day3Solution {
         }
         
         print(sum)
+    }
+    
+    func part2 () {
+        let lines = readTextFile()
+    }
+    
+    func buildCorruptInput (lines: [String]) -> String {
+        var corruptInput = ""
+        for i in 0..<lines.count {
+            corruptInput += lines[i]
+        }
+        return corruptInput
+    }
+    
+    func readTextFile () -> [String] {
+        let fileURL = Bundle.main.url(forResource: "Day3Input", withExtension: "txt")
+        let content = try! String(contentsOf: fileURL!, encoding: .utf8)
+        let lines = content.components(separatedBy: .newlines)
+        return lines
     }
 }

@@ -12,10 +12,7 @@ public class Day3Solution {
         
         let corruptInput = buildCorruptInput(lines: lines)
         
-        /// filter corrupt input
-        let range = NSRange(location: 0, length: corruptInput.utf16.count)
-        let regex = try! NSRegularExpression(pattern: "mul\\(\\d{1,3},\\d{1,3}\\)")
-        let validMultipleMatches = regex.matches(in: corruptInput, range: range)
+        let validMultipleMatches = filterCorruptInput(input: corruptInput, regexPattern: "mul\\(\\d{1,3},\\d{1,3}\\)")
         
         var sum = 0
         
@@ -38,6 +35,16 @@ public class Day3Solution {
     
     func part2 () {
         let lines = readTextFile()
+        
+        let corruptInput = buildCorruptInput(lines: lines)
+        
+        
+    }
+    
+    func filterCorruptInput (input: String, regexPattern: String) -> [NSTextCheckingResult] {
+        let range = NSRange(location: 0, length: input.utf16.count)
+        let regex = try! NSRegularExpression(pattern: regexPattern)
+        return regex.matches(in: input, range: range)
     }
     
     func buildCorruptInput (lines: [String]) -> String {

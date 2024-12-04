@@ -38,7 +38,37 @@ public class Day3Solution {
         
         let corruptInput = buildCorruptInput(lines: lines)
         
+        let validMultipleMatches = filterCorruptInput(input: corruptInput, regexPattern: "mul\\(\\d{1,3},\\d{1,3}\\)|do\\(\\)|don't\\(\\)")
         
+        var sum = 0
+        var isDisabled = false
+        
+        for i in 0..<validMultipleMatches.count {
+            let idx = validMultipleMatches[i].range.location
+            let len = validMultipleMatches[i].range.length
+            let start = corruptInput.index(corruptInput.startIndex, offsetBy: idx)
+            let end = corruptInput.index(start, offsetBy: len)
+            let range = start..<end
+
+            var m = String(corruptInput[range])
+            
+            if (m == "do()") {
+                isDisabled = false
+            } else if (m == "don't()") {
+                isDisabled = true
+            }
+            else {
+                if (isDisabled) {
+                    continue
+                }
+                m = m.replacingOccurrences(of: "mul(", with: "")
+                m = m.replacingOccurrences(of: ")", with: "")
+                let split = m.components(separatedBy: ",")
+                sum += Int(split[0])! * Int(split[1])!
+            }
+        }
+        
+        print(sum)
     }
     
     func filterCorruptInput (input: String, regexPattern: String) -> [NSTextCheckingResult] {

@@ -37,6 +37,51 @@ public class Day5Solution {
         print(sum)
     }
     
+    func part2() {
+        let lines = Helpers().readFile(fileName: "Day5InputParents")
+        
+        /// build a dictionary where the key is a num and the value is a hashset of its children
+        let parentMap = buildParentMap(lines: lines)
+        self.parentMap = parentMap
+        
+        let updates = Helpers().readFile(fileName: "Day5InputUpdates")
+        
+        var sum = 0
+        
+        for update in updates {
+            let updateSeq = update.components(separatedBy: ",")
+            if !isValidUpdate(update: updateSeq) {
+                let sortedSeq = sortByParent(update: updateSeq)
+                let midIdx = sortedSeq.count / 2
+                let middle = Int(sortedSeq[midIdx])!
+                sum += middle
+            }
+        }
+        
+        print(sum)
+    }
+    
+    func sortByParent(update: [String]) -> [String] {
+        var sortedUpdate = update
+        var i = 0
+        while i < sortedUpdate.count-1 {
+            let parent = Int(sortedUpdate[i])!
+            let child = Int(sortedUpdate[i+1])!
+            
+            if !detectChild(parent: parent, child: child) {
+                let temp = sortedUpdate[i]
+                sortedUpdate[i] = sortedUpdate[i+1]
+                sortedUpdate[i+1] = temp
+                i = 0 // move back, this could be more efficient but I am lazy
+            }
+            else {
+                i += 1
+            }
+        }
+        
+        return sortedUpdate
+    }
+    
     func isValidUpdate(update: [String]) -> Bool {
         for i in 0..<update.count-1 {
             let parent = Int(update[i])!

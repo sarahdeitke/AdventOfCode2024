@@ -42,7 +42,7 @@ public class Day6Solution {
         
         print(sum)
     }
-    
+        
     func part2() {
         var map = Helpers().readFile(fileName: "Day6Input").map { Array($0) }
         var sum = 0
@@ -52,7 +52,6 @@ public class Day6Solution {
 
         /// build the path and collect the unique locations
         let guardPath = buildGuardPath(mapCopy: map, r: startRow, c: startCol)
-        
         print("Guard path count: ", guardPath.count)
         
         for i in 0..<guardPath.count {
@@ -66,20 +65,16 @@ public class Day6Solution {
             var row = startRow
             var col = startCol
             var dir = 0
-            
-            // start a timer
-            let start = DispatchTime.now()
+            var visitedStates = Set<String>()
             
             while (isValid(row: row, col: col, map: map)) {
-                /// check if 3 seconds have passed
-                let end = DispatchTime.now()
-                let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
-                let timeInterval = Double(nanoTime) / 1_000_000_000
-                if (timeInterval > 0.1) {
-                    print("Time limit exceeded, assume looping")
+                let state = "\(row),\(col),\(dir)"
+                if visitedStates.contains(state) {
+                    // Loop detected
                     sum += 1
                     break
                 }
+                visitedStates.insert(state)
                 
                 if (map[row][col] == "#" || map[row][col] == "O") {
                     /// take a step back

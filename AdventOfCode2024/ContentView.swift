@@ -17,7 +17,7 @@ struct ContentView: View {
         }
         .padding()
         .onAppear {
-            Day7Solution().part2();
+            Day8Solution().part1();
         }
     }
 }

@@ -7,26 +7,16 @@
 import Foundation
 
 public class Day9Solution {
+    func part2() {
+        let line = Helpers().readFile(fileName: "Day9Input")[0]
+    }
+    
     func part1() {
         let line = Helpers().readFile(fileName: "Day9Input")[0]
-        var initialDisk = [[Int]]()
-        var freeSpace = [Int]()
         var disk = [Int]()
         
         /// build initial disk
-        for i in 0..<line.count {
-            let char = line[line.index(line.startIndex, offsetBy: i)]
-            let num = Int(String(char))!
-
-            if (i % 2 == 0) {
-                /// [value, count]
-                initialDisk.append([i/2, num])
-            }
-            else {
-                /// amount of free space
-                freeSpace.append(num)
-            }
-        }
+        var (initialDisk, freeSpace) = buildInitialDisk(line: line)
         
         var isFillingFreeSpace = false
         while (!initialDisk.isEmpty) {
@@ -52,6 +42,25 @@ public class Day9Solution {
         }
 
         print("Check Sum: ", checkSum)
+    }
+    
+    func buildInitialDisk(line: String) -> ([[Int]], [Int]) {
+        var initialDisk = [[Int]]()
+        var freeSpace = [Int]()
+        for i in 0..<line.count {
+            let char = line[line.index(line.startIndex, offsetBy: i)]
+            let num = Int(String(char))!
+
+            if (i % 2 == 0) {
+                /// [value, count]
+                initialDisk.append([i/2, num])
+            }
+            else {
+                /// amount of free space
+                freeSpace.append(num)
+            }
+        }
+        return (initialDisk, freeSpace)
     }
     
     func appendFreeSpace(disk: [Int], freeSpace: Int, initialDisk: Array<[Int]>) -> ([Int], [[Int]]) {

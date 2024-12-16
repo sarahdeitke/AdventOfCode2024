@@ -7,16 +7,23 @@
 import Foundation
 
 public class Day10Solution {
-//    This larger example has 9 trailheads. Considering the trailheads in reading order, they have scores of 5, 6, 5, 3, 1, 3, 5, 3, and 5.
-//    Row 0, Col 2:  5
-//    Row 0, Col 4:  6
-//    Row 2, Col 4:  6
-//    Row 4, Col 6:  3
-//    Row 5, Col 2:  2
-//    Row 5, Col 5:  4
-//    Row 6, Col 0:  5
-//    Row 6, Col 6:  3
-//    Row 7, Col 1:  5
+    
+    func part2() {
+        let map = Helpers().readFile(fileName: "Day10Input").map { Array($0) }
+        
+        var uniqueTrails = 0
+        
+        for row in 0..<map.count {
+            for col in 0..<map[0].count {
+                if (map[row][col] == "0") {
+                    let validPaths = countUniqueTrails(map: map, r: row, c: col)
+                    uniqueTrails += validPaths
+                }
+            }
+        }
+        
+        print(uniqueTrails)
+    }
     
     func part1() {
         let map = Helpers().readFile(fileName: "Day10Input").map { Array($0) }
@@ -33,6 +40,44 @@ public class Day10Solution {
         }
         
         print(uniqueLocations.count)
+    }
+    
+    func countUniqueTrails(map: [[Character]], r: Int, c: Int) -> Int {
+        let dirs = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+        
+        /// establish queue of locations to check
+        var queue = [[r, c]]
+        var height = 1
+        
+        var uniqueTrails = 0
+        
+        while (height < 10 && !queue.isEmpty) {
+            let count = queue.count
+            
+            for _ in 0..<count {
+                let loc = queue.removeFirst()
+                let row = loc[0]
+                let col = loc[1]
+                
+                for dir in dirs {
+                    let newRow = row + dir[0]
+                    let newCol = col + dir[1]
+                    
+                    if (isValid(row: newRow, col: newCol, map: map)) {
+                        if (height == 9 && map[newRow][newCol] == "9") {
+                            uniqueTrails += 1
+                        }
+                        else if (map[newRow][newCol] == Character(String(height))) {
+                            queue.append([newRow, newCol])
+                        }
+                    }
+                }
+            }
+            
+            height += 1
+        }
+        
+        return uniqueTrails
     }
     
     func findFullTrails(map: [[Character]], r: Int, c: Int) -> Set<String> {

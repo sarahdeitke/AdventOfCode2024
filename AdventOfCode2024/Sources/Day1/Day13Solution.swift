@@ -9,14 +9,35 @@ import Foundation
 public class Day13Solution {
     let A = 3
     let B = 1
-    let A_X = 17
-    let A_Y = 86
-    let B_X = 84
-    let B_Y = 37
+    var A_X = 0
+    var A_Y = 0
+    var B_X = 0
+    var B_Y = 0
     var memo = [String: Int]()
     
     func part1() {
-        print(computeMinCost(X: 7870, Y: 6450, accCost: 0, itrA: 0, itrB: 0))
+        let lines = Helpers().readFile(fileName: "Day13Input")
+        
+        var sum = 0
+        for i in 0..<(lines.count+1)/4 {
+            let buttonA = lines[i*4]
+            /// drop comma from end of string
+            A_X = Int(buttonA.components(separatedBy: " ")[2].components(separatedBy: "+")[1].dropLast())!
+            A_Y = Int(buttonA.components(separatedBy: " ")[3].components(separatedBy: "+")[1])!
+            let buttonB = lines[i*4+1]
+            B_X = Int(buttonB.components(separatedBy: " ")[2].components(separatedBy: "+")[1].dropLast())!
+            B_Y = Int(buttonB.components(separatedBy: " ")[3].components(separatedBy: "+")[1])!
+            let prize = lines[i*4+2]
+            let X = Int(prize.components(separatedBy: " ")[1].components(separatedBy: "=")[1].dropLast())!
+            let Y = Int(prize.components(separatedBy: " ")[2].components(separatedBy: "=")[1])!
+            
+            let result = computeMinCost(X: X, Y: Y, accCost: 0, itrA: 0, itrB: 0)
+            if (result < Int.max) {
+                sum += result
+            }
+        }
+
+        print(sum)
     }
     
     
@@ -41,7 +62,3 @@ public class Day13Solution {
         return result
     }
 }
-
-//Button A: X+94, Y+34
-//Button B: X+22, Y+67
-//Prize: X=8400, Y=5400
